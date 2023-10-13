@@ -1,0 +1,8 @@
+[mysqld]
+datadir = /var/lib/mysql
+basedir = /usr
+bind_address = 0.0.0.0
+port = 3306
+user = root
+log_error = /var/log/mysql/error.log
+socket = /var/run/mysqld/mysqld.sock
