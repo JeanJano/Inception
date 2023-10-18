@@ -1,26 +1,20 @@
 #!/bin/bash
 
-if [ ! -d "/run/php" ]
-then
+if [ ! -d "/run/php" ]; then
         mkdir -p /run/php
 fi
 
-sleep 8
+sleep 10
+cd /var/www/html/wordpress
 
-if [ -f "/var/www/html/wordpress/wp-config.php" ]
-then
-        echo "wordpress already download"
-else
-
-wp core download --allow-root --path="/var/www/html/wordpress/"
-
-chmod -R 777 /var/www/html/wordpress/wp-content
+if ! wp core is-installed --allow-root; then
 
 wp config create --allow-root \
         --dbname=${SQL_DATABASE} \
         --dbuser=${SQL_USER} \
         --dbpass=${SQL_PASSWORD} \
-        --dbhost=${SQL_HOST};
+        --dbhost=${SQL_HOST} \
+        --path='/var/www/html/wordpress/';
 
 wp core install --allow-root \
         --url=https://${DOMAIN_NAME} \
@@ -34,5 +28,8 @@ wp user create --allow-root \
         --role=author \
         --user_pass=${ADMIN_PASSWORD};
 
+wp cache flush --allow-root
+
 fi
-exec /usr/sbin/php-fpm7.4 -F
+
+exec /usr/sbin/php-fpm7.4 -F -R
