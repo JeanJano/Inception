@@ -2,15 +2,7 @@ FROM debian:bullseye
 
 RUN apt update && apt upgrade -y
 
-RUN apt install nginx -y
-
-RUN apt install curl -y
-
-RUN mkdir -p /etc/nginx/ssl/certs
-RUN mkdir -p /etc/nginx/ssl/private
-RUN mkdir -p /var/run/nginx
-
-RUN apt install openssl -y
+RUN apt install curl openssl nginx -y
 
 RUN openssl req -newkey rsa:4096 -sha256 -days 42 -x509 -nodes \
     -subj "/C=FR/ST=Paris/L=Paris/0=42/OU=42Paris/CN=jsauvage.42.fr/UID=jsauvage" \
